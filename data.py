@@ -9,11 +9,12 @@ from subprocess import call
 import os
 from pathlib import Path
 import cv2
+import csv
 
 class DataSet():
     def __init__(self):
         self.data = []; 
-        self.setup_data()
+        
     
     def setup_data(self):
         test_fraction = 0.3
@@ -26,7 +27,7 @@ class DataSet():
             # split data set into train and test
             num_files_test = round(len(files[i]) * test_fraction)
             j = -1
-            for filename in files[0]:
+            for filename in files[i]:
                 j+=1
                 if j < num_files_test:
                    # it is a test file
@@ -65,3 +66,8 @@ class DataSet():
                     
                     self.data.append([train_or_test, cases[i], filename_, 
                                  chunkname, num_frames, (height, width)])
+                    
+        with open('data_file.csv', 'w') as fout:
+            writer = csv.writer(fout)
+            writer.writerows(self.data)
+        print("Extracted and wrote %d video files." % (len(data_file)))
