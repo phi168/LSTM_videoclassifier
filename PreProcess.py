@@ -14,13 +14,13 @@ from scipy import ndimage
 # The idea is to remove information in the video which is not relevant to 
 # it being fake or note. That is: All background (also ignore sound). 
 # Fake videos tend to have more watermarks. Would be good to remove that as a
-# feature tha algorithm trains on. 
+# feature the algorithm trains on. 
 # This didn't work very well using the openCV classifier, but there is lots of
 # room for improvement. 
 # - I will stick with unprocessed data for now
 # - Algorithm can be switched out to a NN solution. 
 # -- Would be ironic if the NN is so good that it doesn't identify fake faces
-# -- But that is a low risk. Just use a less accurate NN. 
+# -- But that is a low risk. Problem would be solved then. 
 # =============================================================================
 
 filenames =  glob.glob('videos/fake/*.mp4') + glob.glob('videos/real/*.mp4')

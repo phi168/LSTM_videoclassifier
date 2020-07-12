@@ -27,7 +27,7 @@ Files:
 ===============  
 PreProcess.py:  
 ---------------
-    Intended to help NN focus on the face and reduce file-size. Current solution is shaky and not implemented in the actual training.  
+Intended to help NN focus on the face and reduce file-size. Current solution is shaky and not implemented in the actual training.  
 
 data.py:  
 ---------------

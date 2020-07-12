@@ -20,13 +20,20 @@ import time
 from pathlib import Path
 #os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
-def train(num_epochs = 100, num_files = 100, 
+def train(num_epochs = 100, num_files = 'all', 
           seq_length = 100, image_shape = (256+6, 256+6, 3)):
     
     d = DataSet()
-    x, y = d.get_data('train', num_files = 3, seq_length = seq_length,
+    if num_files == 'all':
+        num_files_test = sum(y[0] == 'test' for y in d.data)
+        num_files_train = sum(y[0] == 'train' for y in d.data)
+    else:
+        num_files_test = num_files
+        num_files_train = num_files
+        
+    x, y = d.get_data('train', num_files = num_files_train, seq_length = seq_length,
                       image_shape = image_shape)
-    x_test, y_test = d.get_data('test', num_files = 3, seq_length = seq_length,
+    x_test, y_test = d.get_data('test', num_files = num_files_test, seq_length = seq_length,
                       image_shape = image_shape)
     
     #% Build Model
