@@ -52,7 +52,7 @@ Trains NN. Assumes data set was already setup using d.setup_data
 > train()
 
 test_if_fake.py:  
----------------ß
+---------------
 loads NN which was produce by train() and applies to input video  
 test_if_fake(path_to_video) produces a processed video annotating which chunks it thinks are fake or real.  
 
