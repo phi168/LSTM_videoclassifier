@@ -14,14 +14,13 @@ Usage:
 
 directory structure:  
 ===============  
-|PreProcess.py  
-|train.py  
-|data.py  
-|test_if_fake.py  
-/|/'  
----|-videos  
----|---fake  
----|---real  
+PreProcess.py  
+train.py  
+data.py  
+test_if_fake.py  
+/videos/  
+/videos/fake/  
+/videos/real/  
 
 
 Files:  
