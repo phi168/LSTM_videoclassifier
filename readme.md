@@ -26,9 +26,11 @@ test_if_fake.py
 Files:  
 ===============  
 PreProcess.py:  
+---------------
     Intended to help NN focus on the face and reduce file-size. Current solution is shaky and not implemented in the actual training.  
 
 data.py:  
+---------------
 Contains DataSet class, which chops videos into chunks and parses them along for training.  
 
 1. Do this only once:  
@@ -44,11 +46,13 @@ Directory of files is kept in data_file.csv
 > x,y = d.get_data('train')  
 
 train.py: 
+---------------
 Trains NN. Assumes data set was already setup using d.setup_data
 > from train import train
 > train()
 
 test_if_fake.py:  
+---------------ß
 loads NN which was produce by train() and applies to input video  
 test_if_fake(path_to_video) produces a processed video annotating which chunks it thinks are fake or real.  
 
