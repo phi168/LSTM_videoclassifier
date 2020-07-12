@@ -88,7 +88,7 @@ class DataSet():
             data = list(reader)
             
         return data
-    
+        
     def get_data(self, train_or_test, num_files = None, seq_length = 100, image_shape = (300, 300, 3)):
         
         out_list = [] #list of videos to parse      
