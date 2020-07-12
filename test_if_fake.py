@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sun Jul 12 13:22:12 2020
-
+Sentinel DeepFake Challenge
 @author: Thore
 """
 

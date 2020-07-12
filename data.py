@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Jul 11 12:25:31 2020
-
+Sentinel DeepFake Challenge
 @author: Thore
 """
 from subprocess import call
