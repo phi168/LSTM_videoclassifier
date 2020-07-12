@@ -118,7 +118,7 @@ class DataSet():
             #Load frames into memory
             sequence = [load_image(x, image_shape) for x in frames]
             
-            #Get one-hotß
+            #Get one-hot
             if row[1] == 'real':
                 label = to_categorical(0,2)
             elif row[1] == 'fake':
