@@ -11,5 +11,5 @@ from unfake import pre_process as pp
 #%%
 path = 'resources/'
 #get face locations
-pp.process_files_to_get_faces(path)
+# pp.process_files_to_get_faces(path)
 pp.setup_data(root = path)
