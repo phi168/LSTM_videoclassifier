@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Sentinel DeepFake Challenge
+This class handles the data
 @author: Thore
 """
 

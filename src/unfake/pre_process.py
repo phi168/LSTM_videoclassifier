@@ -42,8 +42,11 @@ class Squares(Sequence):
     
     def __getitem__(self, i):
         """return indexed item. Don't crash if outside of index"""
+        
         try:
-            return np.array(self.faces)[np.array(self.frame_idx) == i].tolist()[0]
+            idx = np.array(self.frame_idx) == i
+            return np.array(self.faces)[idx].tolist()[0]
+        
         except IndexError:
             return []
         
@@ -343,12 +346,12 @@ def setup_data(test_fraction = 0.3, root = '', suffix = 'mp4'):
         writer.writerows(data)
     print("Extracted and wrote %d video files." % (len(data)))
 
-def split_video_facedetect(videopath:str, folderdir:str, data:list, seq_length = 2):
+def split_video_facedetect(file_path:str, folderdir:str, data:list, seq_length = 2):
     """take video input an create subvideos with just faces of interest"
     
     Parameters
     ----------
-    videopath : str
+    file_path : str
         path to video.
     folderdir : str
         destination folder (where to put processed chunks)
@@ -362,21 +365,26 @@ def split_video_facedetect(videopath:str, folderdir:str, data:list, seq_length =
     """
     
     #first cleanup the faces list
-    #load list of face coordinates            
-    facesfile = videopath + 'faces.p'
+    #load list of face coordinates    
+    # print(file_path, end = '')        
+    facesfile = file_path + 'faces.p'
     faces = pickle.load(open(facesfile, 'rb'))
     #get video
-    cap = cv2.VideoCapture(videopath) 
-    # N = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) #num frames
+    cap = cv2.VideoCapture(file_path) 
+    N = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) #num frames
     face_list = ListOfSquares()
     for i,faces_in_frame in enumerate(faces): # for every frame
+        print('\r' + file_path + '(%d/%d)'%(i,N), end ='')
         for face in faces_in_frame: #for all faces identified in frame
             #add face to mask
+            
             face_list.append(*face, i)
 
         if i % 500 == 0: # remove short sequences every 500 frames
             face_list.clean_up_by_length()
-    #filter face      
+            face_list.clean_up_by_size()
+    #filter face 
+    print('')     
     face_list.clean_up_by_length()
     face_list.clean_up_by_size()
     face_list.filter_video()
@@ -384,11 +392,11 @@ def split_video_facedetect(videopath:str, folderdir:str, data:list, seq_length =
 
     #get frames per second
     fps = cap.get(cv2.CAP_PROP_FPS)
-    print(videopath)
+    
 
     #for each consecutive sequence of face frames
     for sequence_id, face_sequence in enumerate(face_list):
-        cap = cv2.VideoCapture(videopath)
+        cap = cv2.VideoCapture(file_path)
         #turn sequence into list of 2s long sequences
         subsequences = face_sequence.split(int(fps * seq_length)) #2 second chunks
         
@@ -440,25 +448,6 @@ def chunkify(subsequences, cap, folderdir, sequence_id, data):
         data.append([train_or_test, case, video_name, 
                      chunkname, frame_num + 1, (int(h), int(w))])
         
-    
-#%%
-# def show_list_of_squares(videopath, face_list):
-#     videopath = 'resources/videos/real/302012592572313393031555569823.mp4'
-#     cap = cv2.VideoCapture(videopath) 
-    
-#     while(True):
-#         ret, frame = cap.read()    
-#         if not ret:
-#             break
-#         # Display the resulting frame
-#         cv2.imshow('frame',frame)
-#         if cv2.waitKey(20) & 0xFF == ord('q'):
-#             break
-    
-#     # When everything done, release the capture
-#     cap.release()
-#     cv2.destroyAllWindows()
-    
 
 
 
