@@ -10,26 +10,44 @@ import glob
 from keras.preprocessing.image import img_to_array, load_img
 import numpy as np
 from keras.utils import to_categorical
+import csv
+import os
 
 class DataSet():
-    def __init__(self, read_index = True):
-        if read_index:
-            self.data = self.get_setup()
-        else:
-            self.data = []; 
-            print('Either load data (get_data) or process videos (setup_data)')
+    def __init__(self, filepath, datapath):
+        """filepath: path to list of video folders, datapath: path to videos"""
+        self.data = self._get_setup(filepath)
+        self.root = datapath
         
-    
-
+    def _get_setup(self, filepath):
+        """read file containing details about video locations"""
         
-    def get_setup(self):
-        with open('data_file.csv', 'r') as fin:
+        with open(filepath, 'r') as fin:
             reader = csv.reader(fin)
             data = list(reader)
-            
         return data
         
     def get_data(self, train_or_test, num_files = None, seq_length = 100, image_shape = (300, 300, 3)):
+        """
+        
+
+        Parameters
+        ----------
+        train_or_test : STR
+            'train' or 'test' data set.
+        num_files : INT, optional
+            How many files to return. The default is None.
+        seq_length : int, optional
+            number of frames per video. The default is 100.
+        image_shape : tuple, optional
+            target dimensions of each image. The default is (300, 300, 3).
+
+        Returns
+        -------
+        TYPE
+            DESCRIPTION.
+
+        """
         
         out_list = [] #list of videos to parse      
         for item in self.data:
@@ -37,24 +55,34 @@ class DataSet():
                 out_list.append(item)
 
         if num_files is None:
+            flag_load_all_files = True
             num_files = len(out_list)
-        
+        else:
+            flag_load_all_files = False
+            
+        #ranomise order of list
         shuffle(out_list)
+        
         print("loading %d out of %d samples" % (num_files, len(out_list)))
-        out_list_ = out_list[0:num_files]
+        
         x, y = [], [] 
-        for row in out_list_:
+        i = 0
+        while len(x) < num_files:
+            row = out_list[i]
+            i += 1
             print(row)
-            filename = os.path.join('data', row[0], row[1], row[2], row[3])
+            filename = os.path.join(d.root, 'data', row[0], row[1], row[2], row[3])
             #Load frame paths
-            frames = sorted(glob.glob(filename+'/*.jpg'))
-            #get desired number of frames 
-            try:
-                frames = frames[0:seq_length]
-            except IndexError:
+            frames = sorted(glob.glob(filename+'/*.png'))
+            
+            #get desired number of frames                 
+            if len(frames) < seq_length:
+                if flag_load_all_files: 
+                    num_files -= 1
                 print('warning, skipping file')
                 continue #skip this frame, recorded sequence too short
-
+            frames = frames[0:seq_length]
+            
             #Load frames into memory
             sequence = [load_image(x, image_shape) for x in frames]
             
@@ -73,6 +101,8 @@ class DataSet():
     
 
 def load_image(image, target_shape):
+    """load image and resize to target height and width"""
+    
     # Load the image.
     h, w, _ = target_shape
     image = load_img(image, target_size=(h, w))
