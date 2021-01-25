@@ -59,7 +59,7 @@ def train(num_epochs = 100,
     model.add(Dense(32, activation='relu'))
     model.add(Dropout(0.5))
     model.add(Dense(2, activation='softmax'))
-    
+    model.layers[0].trainable = False
     
     optimizer = Adam(lr=1e-5, decay=1e-6)
     model.compile(loss='categorical_crossentropy', optimizer=optimizer,
